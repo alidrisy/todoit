@@ -3,9 +3,12 @@ import { CalendarCheck } from "lucide-react";
 import { useAuthContext } from "../../context/AuthContext";
 import useGetTodos from "../../hooks/useGetTodos";
 import { useEffect } from "react";
+import useTodos from "../../zustand/useTodos";
+import Todo from "./Todo";
 
 const TodosContainer = () => {
   const { isLoading, getTodos } = useGetTodos();
+  const { todos } = useTodos();
 
   useEffect(() => {
     getTodos();
@@ -20,7 +23,20 @@ const TodosContainer = () => {
   }
   return (
     <div className="w-full flex flex-col flex-grow py-4">
-      <NoChatSelected />
+      {todos.length > 0 ? (
+        <div className="flex flex-col items-center gap-3 max-w-full h-full flex-grow p-6">
+          {todos.map((todo) => (
+            <Todo key={todo.id} todo={todo} />
+          ))}
+        </div>
+      ) : isLoading ? (
+        <div className="flex items-center justify-center w-full h-full flex-grow">
+          <span className="loading loading-spinner loading-lg" />
+        </div>
+      ) : (
+        <NoChatSelected />
+      )}
+
       <AddTodos />
     </div>
   );

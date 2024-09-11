@@ -16,7 +16,7 @@ const useAddTodo = () => {
         },
       });
       console.log(data);
-      setTodos([data, ...todos]);
+      setTodos([...todos, data]);
     } catch (error) {
       toast.error(error.response.data.error);
     } finally {

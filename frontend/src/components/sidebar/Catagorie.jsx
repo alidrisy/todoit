@@ -24,11 +24,11 @@ const Catagorie = ({ catagorie }) => {
         </div>
         <div className="max-sm:hidden w-6 h-6 flex justify-center items-center bg-black/10 rounded-full">
           <p className="font-bold text-sm text-gray-200 pb-[2px]">
-            {
-              todos.filter(
-                (todo) => todo.completed === catagorie?.filter?.completed
-              ).length
-            }
+            {catagorie.id === 0
+              ? todos.length
+              : todos.filter(
+                  (todo) => todo.completed === catagorie?.filter?.completed
+                ).length}
           </p>
         </div>
       </div>
