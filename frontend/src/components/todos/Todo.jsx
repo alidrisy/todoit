@@ -1,28 +1,47 @@
 /* eslint-disable react/prop-types */
-import { Clock12, EllipsisVertical } from "lucide-react";
+import { Clock12 } from "lucide-react";
+import UpdateTodo from "./UpdateTodo";
+import useUpdateTodo from "../../hooks/useUpdateTodo";
+import { extractTime } from "../../utils/extractTime";
+import DeleteTodo from "./DeleteTodo";
 
 const Todo = ({ todo }) => {
+  const { updateTodo, isLoading } = useUpdateTodo();
+
   return (
-    <div className="flex flex-col justify-between bg-gray-200 rounded-lg p-4  overflow-hidden w-full">
-      <div className="flex items-center justify-between bg-gray-200 rounded-lg ">
-        <div className="flex space-x-4 items-center">
-          <input
-            type="checkbox"
-            className="checkbox border-green-600 checkbox-success"
-          />
-          <h1 className="text-xl font-semibold truncate">{todo.title}</h1>
+    <div className="bg-gray-200 rounded-lg p-4 w-full">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center space-x-4">
+          {isLoading ? (
+            <span className="loading loading-ring loading-sm" />
+          ) : (
+            <input
+              type="checkbox"
+              className="checkbox checkbox-success"
+              onChange={() =>
+                updateTodo({ completed: !todo.completed }, todo.id)
+              }
+              checked={todo.completed}
+            />
+          )}
+          <h1 className="text-xl font-semibold truncate max-w-[200px]">
+            {todo.title.legnth > 30
+              ? `${todo.title.slice(0, 30)}...`
+              : todo.title}
+          </h1>
         </div>
-        <div className="flex items-center space-x-2">
-          <div className="flex items-center space-x-2 bg-black/10 py-1 px-2 rounded-lg">
-            <Clock12 size={20} />
-            <p>{new Date(todo.createdAt).toLocaleDateString()}</p>
+        <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-1.5">
+            <Clock12 size={16} />
+            <span className="text-sm">{extractTime(todo.createdAt)}</span>
           </div>
-          <EllipsisVertical />
+          <UpdateTodo todo={todo} />
+          <DeleteTodo todo={todo} />
         </div>
       </div>
-      <p className="text-gray-600  max-w-full break-words break-all px-3 py-2 ">
-        {todo.description}
-      </p>
+      {todo.description && (
+        <p className="text-gray-600 break-words mt-2">{todo.description}</p>
+      )}
     </div>
   );
 };

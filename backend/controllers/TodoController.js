@@ -27,7 +27,6 @@ class TodoController {
 
   static async getTodos(req, res) {
     try {
-      console.log(req.query);
       const filter = {
         userId: req.user.id,
         ...req.query,

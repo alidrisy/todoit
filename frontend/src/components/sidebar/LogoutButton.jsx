@@ -5,7 +5,7 @@ const LogoutButton = () => {
   const { isLoading, logout } = useLogout();
 
   return (
-    <div className="mt-auto">
+    <div className="md:mt-auto">
       {isLoading ? (
         <span className="loading loadaing-spinner " />
       ) : (

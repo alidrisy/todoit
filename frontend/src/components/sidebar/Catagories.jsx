@@ -23,7 +23,7 @@ const catagories = [
 
 const Catagories = () => {
   return (
-    <div className="py-2 flex flex-col">
+    <div className="max-md:hidden py-2 flex flex-col">
       {catagories.map((catagorie) => (
         <Catagorie key={catagorie.id} catagorie={catagorie} />
       ))}

@@ -3,19 +3,20 @@ import toast from "react-hot-toast";
 import useTodos from "../zustand/useTodos";
 import axios from "axios";
 
-const useAddTodo = () => {
+const useUpdateTodo = () => {
   const { setTodos, todos } = useTodos();
   const [isLoading, setIsLoading] = useState(false);
 
-  const addTodos = async (inputs) => {
+  const updateTodo = async (inputs, id) => {
     try {
       setIsLoading(true);
-      const { data } = await axios.post("/api/todos", inputs, {
+      const { data } = await axios.put(`/api/todos/${id}`, inputs, {
         headers: {
           "Content-Type": "application/json",
         },
       });
-      setTodos([...todos, data]);
+      const newTodos = todos.map((todo) => (todo.id === data.id ? data : todo));
+      setTodos(newTodos);
     } catch (error) {
       toast.error(error.response.data.error);
     } finally {
@@ -23,7 +24,7 @@ const useAddTodo = () => {
     }
   };
 
-  return { addTodos, isLoading };
+  return { updateTodo, isLoading };
 };
 
-export default useAddTodo;
+export default useUpdateTodo;

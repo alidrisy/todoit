@@ -1,56 +1,49 @@
+/* eslint-disable react/prop-types */
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { Plus } from "lucide-react";
-import useAddTodo from "../../hooks/useAddTodo";
+import { PencilLine } from "lucide-react";
+import useUpdateTodo from "../../hooks/useUpdateTodo";
 
-const AddTodo = () => {
-  const [inputs, setInputs] = useState({
-    title: "",
-    description: "",
-  });
+const UpdateTodo = ({ todo }) => {
+  const [title, setTitle] = useState(todo.title);
+  const [description, setDescription] = useState(todo.description);
   const [openClosedForm, setOpenClosedForm] = useState(false);
-  const { addTodos, isLoading } = useAddTodo();
+  const { updateTodo, isLoading } = useUpdateTodo();
 
   const handleSubmitForm = async (e) => {
     e.preventDefault();
-    if (!inputs.title.trim()) {
+    if (!title.trim()) {
       toast.error("Title is required");
       return;
     }
+    if (title === todo.title && description === todo.description) {
+      toast.error("No changes made");
+      return;
+    }
 
-    addTodos(inputs);
-    setInputs({ title: "", description: "" });
+    updateTodo({ title, description }, todo.id);
     setOpenClosedForm(false);
   };
 
   const handleClosetForm = (e) => {
     e.preventDefault();
-    setInputs({ title: "", description: "" });
     setOpenClosedForm(false);
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-w-96 mx-auto">
-      <button
-        className="rounded-full bg-black px-3 py-1.5 flex space-x-2 justify-center items-center"
-        onClick={() => setOpenClosedForm(true)}
-      >
+    <div className="flex flex-col items-center justify-center">
+      <button onClick={() => setOpenClosedForm(true)}>
         {isLoading ? (
           <span className="loading loading-ring loading-sm" />
         ) : (
-          <Plus
-            className={`text-white text-sm transform transition-transform duration-300 ease-in-out ${
-              openClosedForm ? "rotate-45" : "rotate-0"
-            }`}
-          />
+          <PencilLine className="hover:text-gray-600" />
         )}
-        <p className="text-white font-medium text-xs pr-2">Create a new Todo</p>
       </button>
 
       <div className={`modal ${openClosedForm && "modal-open"} bg-transparent`}>
         <div className="modal-box w-full p-6 rounded-lg shadow-md bg-white">
           <h1 className="text-3xl font-semibold text-center text-black">
-            Add a<span className="text-blue-600"> New Todo</span>
+            Update<span className="text-blue-600"> Todo</span>
           </h1>
           <form>
             <div>
@@ -61,10 +54,8 @@ const AddTodo = () => {
                 type="text"
                 placeholder="Enter title"
                 className="w-full input input-bordered h-10 text-black"
-                value={inputs.title}
-                onChange={(e) =>
-                  setInputs({ ...inputs, title: e.target.value })
-                }
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
               />
             </div>
 
@@ -77,10 +68,8 @@ const AddTodo = () => {
               <textarea
                 placeholder="Enter description"
                 className="w-full input input-bordered h-10 text-black pt-1"
-                value={inputs.description}
-                onChange={(e) =>
-                  setInputs({ ...inputs, description: e.target.value })
-                }
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
               />
             </div>
 
@@ -106,4 +95,4 @@ const AddTodo = () => {
   );
 };
 
-export default AddTodo;
+export default UpdateTodo;

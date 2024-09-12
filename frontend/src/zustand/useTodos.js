@@ -3,7 +3,7 @@ import { create } from "zustand";
 const useTodos = create((set) => ({
   selectedCatagory: {
     id: 0,
-    name: "All",
+    name: "Home",
     filter: {},
   },
   setSelectedCatagory: (catagory) => set({ selectedCatagory: catagory }),

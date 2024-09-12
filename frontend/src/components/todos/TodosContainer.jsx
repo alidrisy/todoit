@@ -2,13 +2,27 @@ import AddTodos from "./AddTodos";
 import { CalendarCheck } from "lucide-react";
 import { useAuthContext } from "../../context/AuthContext";
 import useGetTodos from "../../hooks/useGetTodos";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import useTodos from "../../zustand/useTodos";
 import Todo from "./Todo";
 
 const TodosContainer = () => {
   const { isLoading, getTodos } = useGetTodos();
-  const { todos } = useTodos();
+  const { todos, selectedCatagory } = useTodos();
+  const [filterdTodos, setFilterdtodos] = useState();
+
+  useEffect(() => {
+    if (selectedCatagory.name === "Home") {
+      setFilterdtodos(todos);
+    } else {
+      setFilterdtodos(
+        todos.filter(
+          (todo) => todo.completed === selectedCatagory?.filter?.completed
+        )
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedCatagory, todos]);
 
   useEffect(() => {
     getTodos();
@@ -22,10 +36,10 @@ const TodosContainer = () => {
     );
   }
   return (
-    <div className="w-full flex flex-col flex-grow py-4">
+    <div className="w-full flex-1 flex flex-col flex-grow py-4">
       {todos.length > 0 ? (
-        <div className="flex flex-col items-center gap-3 max-w-full h-full flex-grow p-6">
-          {todos.map((todo) => (
+        <div className="flex-1 space-y-3 max-w-full h-full flex-grow p-6 overflow-y-auto">
+          {filterdTodos.map((todo) => (
             <Todo key={todo.id} todo={todo} />
           ))}
         </div>
@@ -36,8 +50,9 @@ const TodosContainer = () => {
       ) : (
         <NoChatSelected />
       )}
-
-      <AddTodos />
+      <div className="pt-3">
+        <AddTodos />
+      </div>
     </div>
   );
 };
