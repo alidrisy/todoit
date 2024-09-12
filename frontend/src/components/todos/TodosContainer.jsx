@@ -9,7 +9,7 @@ import Todo from "./Todo";
 const TodosContainer = () => {
   const { isLoading, getTodos } = useGetTodos();
   const { todos, selectedCatagory } = useTodos();
-  const [filterdTodos, setFilterdtodos] = useState();
+  const [filterdTodos, setFilterdtodos] = useState([]);
 
   useEffect(() => {
     if (selectedCatagory.name === "Home") {
