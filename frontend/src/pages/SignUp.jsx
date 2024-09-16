@@ -20,8 +20,7 @@ const SignUp = () => {
       !inputs.name ||
       !inputs.email ||
       !inputs.password ||
-      !inputs.confirmPassword ||
-      !inputs.gender
+      !inputs.confirmPassword 
     ) {
       toast.error("All fields are required");
       return;
@@ -57,7 +56,7 @@ const SignUp = () => {
               <span className="text-base label-text text-white">Full Name</span>
             </label>
             <input
-              type="text"
+              type="email"
               placeholder="John Doe"
               className="w-full input input-bordered  h-10"
               value={inputs.name}

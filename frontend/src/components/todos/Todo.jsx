@@ -33,7 +33,7 @@ const Todo = ({ todo }) => {
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-1.5">
             <Clock12 size={16} />
-            <span className="text-sm">{extractTime(todo.createdAt)}</span>
+            <span className="text-sm">{extractTime(todo?.createdAt || todo.created_at)}</span>
           </div>
           <UpdateTodo todo={todo} />
           <DeleteTodo todo={todo} />

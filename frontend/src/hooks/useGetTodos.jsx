@@ -11,6 +11,7 @@ const useGetTodos = () => {
     try {
       setIsLoading(true);
       const { data } = await axios.get("/api/todos");
+      console.log(data);
       setTodos(data);
     } catch (error) {
       toast.error(error.response.data.error);

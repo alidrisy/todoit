@@ -23,7 +23,6 @@ app.add_middleware(
 app.router.include_router(router)
 
 
-
 @app.get("/")
 def read_root():
     return {"Hello": "World"}
@@ -31,4 +30,5 @@ def read_root():
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000, reload=True)
+
+    uvicorn.run(app, host="0.0.0.0", port=3000, reload=True)

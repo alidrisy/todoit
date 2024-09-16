@@ -62,7 +62,7 @@ def logout(
     return response
 
 
-@router.get("/users/me", tags=["auth"])
+@router.get("/auth/me", tags=["auth"])
 async def read_users_me(
     current_user: dict = Depends(get_current_user),
 ) -> JSONResponse:
