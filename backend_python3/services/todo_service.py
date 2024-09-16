@@ -43,7 +43,22 @@ class TodoService:
         if not todo:
             return None
         for key, value in item.dict().items():
-            setattr(todo, key, value)
+            if value is not None:
+                setattr(todo, key, value)
         db.commit()
         db.refresh(todo)
+        return todo
+
+    @staticmethod
+    def delete_todo(db: Session, user_id: str, todo_id: str):
+        """
+        This method deletes the user todos in the database.
+        """
+        todo = (
+            db.query(Todo).filter(Todo.owner_id == user_id, Todo.id == todo_id).first()
+        )
+        if not todo:
+            return None
+        db.delete(todo)
+        db.commit()
         return todo

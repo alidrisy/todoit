@@ -37,6 +37,7 @@ class User(UserBase):
     id: str
     email: str
     name: str = None
+
     todos: list[Todo] = []
 
     class Config:

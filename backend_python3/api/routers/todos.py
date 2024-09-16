@@ -1,7 +1,7 @@
 from services.todo_service import TodoService
 from api.routers import router
 from api.dependencies import get_db, get_current_user
-from schemas.todo_schemas import TodoCreate
+from schemas.todo_schemas import TodoCreate, TodoUpdate
 from fastapi import Depends
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
@@ -14,7 +14,7 @@ def create_todo(
     db: Session = Depends(get_db),
 ) -> JSONResponse:
     """Create a new todo."""
-    new_todo = TodoService.create_todo(db, todo.dict(), user["id"])
+    new_todo = TodoService.create_todo(db, todo.dict(), user.id)
     return JSONResponse(new_todo.to_dict(), status_code=201)
 
 
@@ -29,12 +29,25 @@ def get_todos(
 @router.put("/todos/{todo_id}", tags=["todos"])
 def update_todo(
     todo_id: str,
-    todo: TodoCreate,
+    todo: TodoUpdate,
     user: dict = Depends(get_current_user),
     db: Session = Depends(get_db),
 ) -> JSONResponse:
     """Update a todo."""
     todo = TodoService.update_todo(db, user.id, todo_id, todo)
+    if not todo:
+        return JSONResponse({"error": "Todo not found"}, status_code=404)
+    return JSONResponse(todo.to_dict())
+
+
+@router.delete("/todos/{todo_id}", tags=["todos"])
+def delete_todo(
+    todo_id: str,
+    user: dict = Depends(get_current_user),
+    db: Session = Depends(get_db),
+) -> JSONResponse:
+    """Delete a todo."""
+    todo = TodoService.delete_todo(db, user.id, todo_id)
     if not todo:
         return JSONResponse({"error": "Todo not found"}, status_code=404)
     return JSONResponse(todo.to_dict())
