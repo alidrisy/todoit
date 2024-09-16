@@ -17,7 +17,9 @@ class UserService:
     @staticmethod
     def create_user(db: Session, user: schemas.UserCreate):
         passw = user["password"]
-        db_user = User(email=user["email"], password=hash_password(passw))
+        db_user = User(
+            email=user["email"], password=hash_password(passw), name=user["name"]
+        )
         db.add(db_user)
         db.commit()
         db.refresh(db_user)

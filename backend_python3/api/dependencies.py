@@ -3,7 +3,6 @@ import bcrypt
 from services.user_service import UserService
 from fastapi import Depends, HTTPException, status, Cookie
 from sqlalchemy.orm import Session
-from fastapi.security import OAuth2PasswordBearer
 from datetime import datetime, timedelta, timezone
 from dotenv import load_dotenv
 import jwt as jsonwebtoken
@@ -24,12 +23,11 @@ def get_db():
         db.close()
 
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/login")
-
-
 def verify_password(plain_password, hashed_password):
     """Verify password."""
-    return bcrypt.checkpw(plain_password.encode("utf-8"), hashed_password)
+    return bcrypt.checkpw(
+        plain_password.encode("utf-8"), hashed_password.encode("utf-8")
+    )
 
 
 def get_user(user: dict | None, db: Session = Depends(get_db)):
@@ -93,7 +91,7 @@ async def get_current_user(
     user = UserService.get_user(db, user_id)
     if user is None:
         raise credentials_exception
-    return user.to_dict()
+    return user
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:

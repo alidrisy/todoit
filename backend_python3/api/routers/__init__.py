@@ -5,3 +5,4 @@ router = APIRouter(
 )
 
 from api.routers.auth import *
+from api.routers.todos import *

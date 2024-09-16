@@ -11,8 +11,7 @@ class UserBase(BaseModel):
     This class defines the UserBase schema for the database.
     """
 
-    email: str
-    name: str
+    pass
 
 
 class UserCreate(UserBase):
@@ -25,9 +24,19 @@ class UserCreate(UserBase):
     password: str
 
 
+class UserLogin(UserBase):
+    """
+    This class defines the UserLogin schema for the database.
+    """
+
+    email: str
+    password: str
+
+
 class User(UserBase):
     id: str
-    is_active: bool
+    email: str
+    name: str = None
     todos: list[Todo] = []
 
     class Config:

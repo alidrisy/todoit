@@ -2,7 +2,6 @@
 
 from services.user_service import UserService
 from api.routers import router
-from pydantic import BaseModel
 from datetime import datetime
 from fastapi import BackgroundTasks, Depends, Cookie, HTTPException, status
 from fastapi.responses import JSONResponse
@@ -12,7 +11,7 @@ from api.dependencies import (
     get_current_user,
     authenticate_user,
 )
-from schemas.user_schemas import UserCreate
+from schemas.user_schemas import UserCreate, UserLogin
 from sqlalchemy.orm import Session
 from fastapi.security import OAuth2PasswordRequestForm
 from typing import Annotated, Any
@@ -34,7 +33,7 @@ def create_user(user: UserCreate, db: Session = Depends(get_db)) -> JSONResponse
 
 @router.post("/auth/login", tags=["auth"])
 def login(
-    user: UserCreate,
+    user: UserLogin,
 ) -> JSONResponse:
     """Login a user."""
     db_user = authenticate_user(user.dict())
@@ -63,7 +62,7 @@ def logout(
     return response
 
 
-@router.get("/users/me", tags=["auth"])
+@router.get("/user/me", tags=["auth"])
 async def read_users_me(
     current_user: dict = Depends(get_current_user),
 ) -> JSONResponse:
@@ -75,4 +74,4 @@ async def read_users_me(
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    return JSONResponse(content=current_user)
+    return JSONResponse(content=current_user.to_dict())
